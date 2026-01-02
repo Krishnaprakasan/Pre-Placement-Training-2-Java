@@ -1,0 +1,52 @@
+class WordDictionary {
+    public TrieNode root;
+    public WordDictionary() {
+        root=new TrieNode('0');
+    }
+    
+    public void addWord(String word) {
+        addWord(root,word);
+    }
+    public void addWord(TrieNode root,String s){
+        if(s.length()==0){
+            root.isWord=true;
+            return ;
+        }
+        int idx=s.charAt(0)-'a';
+        TrieNode child=root.children[idx];
+        if(child==null){
+            child=new TrieNode(s.charAt(0));
+            root.children[idx]=child;
+        }
+        addWord(child,s.substring(1));
+    }
+    
+    public boolean search(String word) {
+        return search(root,word);
+    }
+    public boolean search(TrieNode root,String s){
+        if(s.length()==0) return root.isWord;
+        boolean ans=false;
+        if(s.charAt(0)=='.'){
+            for(int i=0;i<26;i++){
+                if(root.children[i]!=null) ans|=search(root.children[i],s.substring(1));
+            }
+        }else{
+            int idx=s.charAt(0)-'a';
+            TrieNode child=root.children[idx];
+            if(child==null) return false;
+            ans=search(child,s.substring(1));
+        }
+        return ans;
+    }
+}
+class TrieNode{
+    char data;
+    boolean isWord;
+    TrieNode[] children;
+    public TrieNode(char data){
+        this.data=data;
+        isWord=false;
+        children=new TrieNode[26];
+    }
+}
