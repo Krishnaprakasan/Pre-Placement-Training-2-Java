@@ -1,0 +1,28 @@
+class Solution {
+	public int lengthLongestPath(String input) {
+		String[] file=input.split("\n");
+		Map<Integer, Integer> map=new HashMap<Integer, Integer>();
+		int result=0;
+    
+		for(int i=0; i<file.length; i++) {
+			int count=0;
+			for(int j=0; j<file[i].length(); j++) {
+				if(file[i].charAt(j)!='\t')
+					break;
+				++count;
+			}
+			if(file[i].contains(".")) {
+				if(map.get(count-1)!=null)
+					result=Math.max(result, file[i].length()+map.get(count-1)-count+1);
+				else
+					result=Math.max(result, file[i].length()-count);
+			}
+			else if(count==0)
+				map.put(0, file[i].length());
+			else
+				map.put(count, map.get(count-1)+file[i].length()-count+1);
+		}
+    
+		return result;
+	}
+}
